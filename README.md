@@ -26,7 +26,7 @@ Ensure you have Docker and Docker Compose installed on your machine.
    This command will build and start the necessary Docker containers. The process may take some time.
 
 3. Access the application:
-   
+
    By default, the application will be available on port 80 of localhost. Ensure this port is available; otherwise, the build may fail.
 
    Open your browser and go to http://localhost:8010.
