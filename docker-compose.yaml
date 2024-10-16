@@ -1,0 +1,53 @@
+services:
+  php-fpm:
+    image: tech-test
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      args:
+        - "APP_ENV=dev"
+        - "XDEBUG=1"
+    volumes:
+      - "./code:/code"
+      - "./docker/php/config/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini"
+    restart: always
+    networks:
+      - test-network
+
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+      args:
+        - "APP_ENV=dev"
+    ports:
+      - "8010:80"
+    volumes:
+      - "./code/public:/code/public"
+    depends_on:
+      - php-fpm
+    restart: always
+    networks:
+      - test-network
+
+  mysql:
+    image: mysql:8.0.33
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root_password'
+      MYSQL_DATABASE: 'laravel_db'
+      MYSQL_USER: 'laravel'
+      MYSQL_PASSWORD: 'password'
+    ports:
+      - '33070:3306'
+    volumes:
+      - mysql-data:/var/lib/mysql
+    restart: always
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
