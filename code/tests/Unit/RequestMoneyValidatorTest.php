@@ -45,8 +45,7 @@ class RequestMoneyValidatorTest extends TestCase
     {
         $request = Request::create(10000, 'USD');
         $transaction = Transaction::create(10000, 'USD');
-
-        $validator = new RequestMoneyValidator(0);
+        $validator = new RequestMoneyValidator(10);
 
         $this->assertTrue($validator->validate($request, $transaction));
     }
@@ -66,6 +65,10 @@ class RequestMoneyValidatorTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Deviation must be between 0 and 100.');
 
+        $request = Request::create(10000, 'USD');
+        $transaction = Transaction::create(9000, 'USD');
         $validator = new RequestMoneyValidator(-5);
+
+        $validator->validate($request, $transaction);
     }
 }

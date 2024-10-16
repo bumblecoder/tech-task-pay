@@ -123,5 +123,5 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    'transaction_deviation' => env('TRANSACTION_DEVIATION', 5),
+    'transaction_deviation' => (int) env('TRANSACTION_DEVIATION', 5),
 ];

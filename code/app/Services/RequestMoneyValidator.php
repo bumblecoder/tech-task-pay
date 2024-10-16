@@ -12,13 +12,18 @@ final readonly class RequestMoneyValidator
 {
     public function __construct(private int $deviation)
     {
-        if ($deviation < 0 || $deviation > 100) {
-            throw new InvalidArgumentException('Deviation must be between 0 and 100.');
-        }
     }
 
     public function validate(Request $request, Transaction $transaction): bool
     {
+        if (!filter_var(
+            $this->deviation,
+            FILTER_VALIDATE_INT,
+            ['options' => ['min_range' => 0, 'max_range' => 100]]
+        )) {
+            throw new InvalidArgumentException('Deviation must be between 0 and 100.');
+        }
+
         if ($request->getCurrency() !== $transaction->getCurrency()) {
             return false;
         }
